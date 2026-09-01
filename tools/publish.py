@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
-"""发布 OWASP 集成到 GitHub（tajleonbennis-maker/redteam-elite-pack）。
+"""把仓库文件发布到 GitHub（yardfribley-bit/redteam-elite-pack）。
 
 用法：
     gh auth login            # 首次需登录（token 失效时也先重登）
-    python3 publish.py
+    python3 tools/publish.py
 
 原理：对每个文件走 GitHub Contents API（gh api PUT），自动取远端 sha 以支持「新建/更新」。
-无需本地 git 仓库，仅依赖 gh CLI。
+依赖 gh CLI（无需本地 git 仓库）；若已配置 SSH key，也可直接用 git push。
+
+注意：路径基准为仓库根目录，因此请在仓库根目录执行（python3 tools/publish.py）。
 """
 import base64
 import json
@@ -15,22 +17,23 @@ import shutil
 import subprocess
 import sys
 
-REPO = "tajleonbennis-maker/redteam-elite-pack"
-BASE = os.path.dirname(os.path.abspath(__file__))
+REPO = "yardfribley-bit/redteam-elite-pack"
+BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # (仓库内路径, 本地文件路径)
 FILES = [
-    ("attack_pack.json", "attack_pack.json"),
-    ("redteam_engine.py", "redteam_engine.py"),
-    ("format_report.py", "format_report.py"),
-    ("owasp_mapping.md", "owasp_mapping.md"),
-    ("build_pack_v2.py", "build_pack_v2.py"),
+    ("src/attack_pack.json", "src/attack_pack.json"),
+    ("src/redteam_engine.py", "src/redteam_engine.py"),
+    ("src/poc_suite.py", "src/poc_suite.py"),
+    ("src/format_report.py", "src/format_report.py"),
+    ("src/cross_model_matrix.py", "src/cross_model_matrix.py"),
+    ("src/consolidate_or.py", "src/consolidate_or.py"),
+    ("docs/OWASP_MAPPING.md", "docs/OWASP_MAPPING.md"),
+    ("tools/build_pack_v2.py", "tools/build_pack_v2.py"),
     ("README.md", "README.md"),
-    ("examples/profile_owasp_report.md", "profile_owasp/report.md"),
-    ("examples/profile_owasp_summary.json", "profile_owasp/summary.json"),
 ]
 
-COMMIT_MSG = "feat: integrate OWASP LLM Top10 + Agentic Top10 into elite pack v2 (24 attacks, --owasp filter, coverage report)"
+COMMIT_MSG = "chore: publish latest pack / engine / docs via Contents API"
 
 
 def find_gh():

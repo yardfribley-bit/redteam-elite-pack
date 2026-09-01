@@ -189,7 +189,7 @@ def build_report_md(profile, pack=None):
             rep = "、".join(n for n, _ in items[:2])
             L.append(f"| {fam} | {o} | {len(items)} | {broke} | {rep} |")
         L.append("")
-        L.append("> 注：ASI03 / ASI07 / ASI10 为纯 agent 运行时风险（需工具/记忆/多 agent 环境），本轻量引擎仅打 `/v1/chat/completions`，暂未覆盖；详见 `owasp_mapping.md`。")
+        L.append("> 注：ASI03 / ASI07 / ASI10 为纯 agent 运行时风险（需工具/记忆/多 agent 环境），本轻量引擎仅打 `/v1/chat/completions`，暂未覆盖；详见 `docs/OWASP_MAPPING.md`。")
         L.append("")
     return "\n".join(L)
 

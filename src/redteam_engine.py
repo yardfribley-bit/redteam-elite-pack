@@ -8,12 +8,15 @@
   - detector 用本地关键词判定（不调模型），token 消耗降低 1-2 个数量级
   - 对命中漏洞自动生成利用链 PoC
 
-用法:
-  python3 redteam_engine.py --mock                         # 端到端演示（不花钱）
-  python3 redteam_engine.py --key $KEY --model gpt-4o      # 打任意 OpenAI-compatible 模型
-  python3 redteam_engine.py --base-url https://x/v1 --key $KEY --model m
+用法（请在仓库根目录执行）:
+  python3 src/redteam_engine.py --mock                         # 端到端演示（不花钱）
+  python3 src/redteam_engine.py --key $KEY --model gpt-4o      # 打任意 OpenAI-compatible 模型
+  python3 src/redteam_engine.py --base-url https://x/v1 --key $KEY --model m
 """
 import argparse, json, os, ssl, sys, time, urllib.request, urllib.error
+
+# 仓库根目录（src/ 的上一级）：输出默认写到 results/，不污染源码目录
+REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import format_report
 
@@ -256,7 +259,7 @@ def main():
     p.add_argument("--owasp", default=None, help="只跑指定 OWASP 项，如 LLM01,LLM05,ASI05（逗号分隔）")
     p.add_argument("--insecure", action="store_true", help="跳过 TLS 证书校验（走 MITM 代理时必需）")
     p.add_argument("--parallel", type=int, default=3, help="并发线程数（默认 3；OpenRouter 建议 2~4，过高易触发频限）")
-    p.add_argument("--out", default=os.path.join(os.path.dirname(os.path.abspath(__file__)), "profile"))
+    p.add_argument("--out", default=os.path.join(REPO_ROOT, "results", "profile"))
     args = p.parse_args()
     if not args.mock and not args.key:
         print("ERROR: 需要 --key 或 --mock"); sys.exit(1)

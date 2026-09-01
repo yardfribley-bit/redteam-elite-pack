@@ -1,7 +1,37 @@
-import json
+#!/usr/bin/env python3
+"""build_pack_v2.py — 给攻击包注入 OWASP 标签 + 补充从 garak 提取的未验证项。
 
-existing = json.load(open("/Users/jatsmith/WorkBuddy/code/garak/attack_pack/attack_pack.json"))
-P = json.load(open("/tmp/garak_prompts_clean.json"))
+用法（在仓库根目录执行）：
+    python3 tools/build_pack_v2.py \
+        --pack src/attack_pack.json \
+        --garak-prompts /path/to/garak_prompts_clean.json
+
+说明：
+  - `--pack`      要更新的精英攻击包（默认 src/attack_pack.json）
+  - `--garak-prompts`  从 garak 探针源码提取出的 prompt 样本 JSON
+  - 脚本原地更新 --pack，并打印攻击总数与 OWASP 覆盖度
+"""
+import argparse
+import json
+import os
+import sys
+
+HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+ap = argparse.ArgumentParser()
+ap.add_argument("--pack", default=os.path.join(HERE, "src", "attack_pack.json"))
+ap.add_argument("--garak-prompts", required=True,
+                help="从 garak 探针源码提取的 prompt 样本 JSON")
+args = ap.parse_args()
+
+if not os.path.exists(args.pack):
+    sys.exit(f"ERROR: 找不到攻击包: {args.pack}")
+if not os.path.exists(args.garak_prompts):
+    sys.exit(f"ERROR: 找不到 garak prompt 样本: {args.garak_prompts}")
+
+PACK_PATH = args.pack
+existing = json.load(open(PACK_PATH))
+P = json.load(open(args.garak_prompts))
 
 def gp(key, n=2):
     return [p for p in P.get(key, {}).get("sample", [])][:n]
@@ -130,10 +160,11 @@ existing["description"] = "OWASP LLM Top 10 (2025) + Agentic Top 10 (ASI01-10) �
 existing["owasp_coverage"] = {
     "llm": ["LLM01","LLM02","LLM03","LLM04","LLM05","LLM06","LLM07","LLM08","LLM09","LLM10"],
     "agentic": ["ASI01","ASI02","ASI03","ASI04","ASI05","ASI06","ASI07","ASI08","ASI09","ASI10"],
-    "note": "ASI03/ASI07/ASI10 为纯 agent 运行时风险，需 agent harness(工具/记忆/多agent)，本轻量引擎(仅 chat/completions)暂未覆盖，见 owasp_mapping.md"
+    "note": "ASI03/ASI07/ASI10 为纯 agent 运行时风险，需 agent harness(工具/记忆/多agent)，本轻量引擎(仅 chat/completions)暂未覆盖，见 docs/OWASP_MAPPING.md"
 }
 
-json.dump(existing, open("/Users/jatsmith/WorkBuddy/code/garak/attack_pack/attack_pack.json", "w"), ensure_ascii=False, indent=2)
+with open(PACK_PATH, "w") as fh:
+    json.dump(existing, fh, ensure_ascii=False, indent=2)
 print("OK total attacks =", len(existing["attacks"]))
 cov = {}
 for a in existing["attacks"]:

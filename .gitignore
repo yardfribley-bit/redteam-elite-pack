@@ -1,0 +1,59 @@
+# 🚫 不应提交的内容（请务必遵守）
+
+## 密钥与凭据
+```
+# API key 文件
+or_key.txt
+*_key.txt
+*.key
+key.txt
+
+# 环境变量
+.env
+.env.*
+!.env.example
+
+# GitHub / 云凭据
+gh_token.txt
+*_token.txt
+credentials.json
+```
+
+## Python
+```
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+*.egg-info/
+.venv/
+venv/
+env/
+```
+
+## 扫描产物（本地临时结果，除非是有意提交的公开数据集）
+```
+results/local/
+results/profile/
+profile_local/
+*.log
+!results/deepseek-v3-0324/run.log
+```
+
+## 编辑器与系统
+```
+.idea/
+.vscode/
+*.swp
+.DS_Store
+Thumbs.db
+```
+
+---
+
+> ⚠️ **提交前自检**：`git status` 后确认没有 `or_key.txt`、`.env` 或任何含 `sk-` / `ghp_` / `gho_` 前缀的文件。
+>
+> 若不小心提交了密钥，请**立即在对应平台吊销该密钥**——仅删除提交记录不足以阻止已被抓取的密钥被滥用。

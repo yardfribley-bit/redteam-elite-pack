@@ -1,11 +1,15 @@
 #!/usr/bin/env python3
 """
-跨模型 OWASP 复现矩阵：扫描 profiles_or/*/profile.json，把每个模型按
+跨模型 OWASP 复现矩阵：扫描 results/cross-model/*/profile.json，把每个模型按
 LLM01-10 / ASI01-10 的命中情况拼成一张对比表，并标出"所有模型都未复现"的硬骨头。
 
-用法: python3 cross_model_matrix.py [--profiles profiles_or] [--out cross_model_repro.md]
+用法: python3 src/cross_model_matrix.py --profiles results/cross-model --out results/cross-model/cross_model_repro.md
+
+注意：脚本默认从仓库根目录解析结果目录，因此请在仓库根目录执行。
 """
 import argparse, json, os, glob
+
+REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 LLM_LABELS = {
     "LLM01": "提示注入", "LLM02": "敏感信息泄露", "LLM03": "供应链",
@@ -54,7 +58,7 @@ def best_for_cat(attacks, cat):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--profiles", default=os.path.join(os.path.dirname(os.path.abspath(__file__)), "profiles_or"))
+    ap.add_argument("--profiles", default=os.path.join(REPO_ROOT, "results", "cross-model"))
     ap.add_argument("--out", default=None)
     a = ap.parse_args()
 

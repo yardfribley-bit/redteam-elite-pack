@@ -7,11 +7,11 @@ RedTeam Elite — 武器化 PoC 套件 + 深度利用链
 调用逻辑与 redteam_engine.py 同源（含 429/5xx 指数退避），自包含、无外部依赖。
 
 用法（在服务器 /root/redteam/ 运行）:
-  python3 poc_suite.py --poc dan_hijack --model deepseek/deepseek-chat-v3-0324
-  python3 poc_suite.py --poc all --model deepseek/deepseek-chat-v3-0324 --generations 3
-  python3 poc_suite.py --chain injection_to_leak --model deepseek/deepseek-chat-v3-0324
-  python3 poc_suite.py --chain all --model deepseek/deepseek-chat-v3-0324
-  python3 poc_suite.py --poc all --chain all --model <model> --key-file or_key.txt --out artifacts
+  python3 src/poc_suite.py --poc dan_hijack --model deepseek/deepseek-chat-v3-0324
+  python3 src/poc_suite.py --poc all --model deepseek/deepseek-chat-v3-0324 --generations 3
+  python3 src/poc_suite.py --chain injection_to_leak --model deepseek/deepseek-chat-v3-0324
+  python3 src/poc_suite.py --chain all --model deepseek/deepseek-chat-v3-0324
+  python3 src/poc_suite.py --poc all --chain all --model <model> --key-file or_key.txt --out artifacts
 """
 import json, os, sys, ssl, re, time, argparse, urllib.request, urllib.error
 

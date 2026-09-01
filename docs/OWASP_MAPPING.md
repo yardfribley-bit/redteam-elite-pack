@@ -41,11 +41,11 @@
 
 ```bash
 # 全量（24 个精英攻击）
-python3 redteam_engine.py --key $KEY --model m --generations 3
+python3 src/redteam_engine.py --key $KEY --model m --generations 3
 
 # 只测 OWASP 某几项（按需缩小范围）
-python3 redteam_engine.py --key $KEY --model m --owasp LLM01,LLM05,ASI05
-python3 redteam_engine.py --key $KEY --model m --owasp LLM02,LLM07,ASI09
+python3 src/redteam_engine.py --key $KEY --model m --owasp LLM01,LLM05,ASI05
+python3 src/redteam_engine.py --key $KEY --model m --owasp LLM02,LLM07,ASI09
 ```
 
 报告里新增「七、OWASP Top 10 覆盖度」章节，按 LLM/ASI 维度汇总每项覆盖的攻击数与命中数。

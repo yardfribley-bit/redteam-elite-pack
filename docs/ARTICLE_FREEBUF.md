@@ -157,7 +157,7 @@ https://github.com/tajleonbennis-maker/redteam-elite-pack
 ```
 
 ```bash
-python3 redteam_engine.py --base-url https://x/v1 --key $KEY --model gpt-4o --generations 3
+python3 src/redteam_engine.py --base-url https://x/v1 --key $KEY --model gpt-4o --generations 3
 python3 webapp.py --port 8080
 ```
 
